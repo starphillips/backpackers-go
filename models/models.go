@@ -37,3 +37,4 @@ type Activity struct {
 }
 
 // Database structs mirror tables.
+// Database structs represent raw data
