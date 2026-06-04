@@ -1,3 +1,33 @@
+1. Should I allow activities to have multiple tags?
+
+Example: surfing could be watersports or adrenaline junkie ?
+
+Tags Explained:
+Tags = the category
+Destintions can have multiple tags
+Countries have no tags
+Acitvities have only one tag
+
+New change: activities can have multiple tags. 
+ 
+ACTIVITIES = MULTIPLE TAGS
+
+create table public.activities(
+    id serial primary key,
+    activity_name text not null,
+    destination_id int references public.destinations(id),
+    description text,
+    price_average numeric(8,2)
+);
+
+
+create table public.activity_tags(
+    activity_id int references public.activities(id),
+    tag_id int references public.tags(id),
+    primary key(activity_id, tag_id)
+);
+
+
 2. Should I add additional tags?
 
 Additional tags
@@ -16,3 +46,54 @@ TODO:
 - Create activities and activity tag table
 - Repopulate the acitivity table with new activities per destination and remove the tag id
 - Transfer each tag_id to the coresponding activity tag and create multiple if needed
+
+3. Logic Question
+
+DATABASE
+   ↓
+Database Access Layer (SQL queries)
+   ↓
+Raw DB Structs (models.go)
+   ↓
+Loader Layer (joins, maps, enriches)
+   ↓
+Algorithm Structs (algorithm.go)
+   ↓
+Scoring Logic
+   ↓
+Day Allocation Logic
+   ↓
+Route Ordering Logic
+   ↓
+Final Itinerary
+
+
+
+4. structure
+/project-root
+│
+├── /cmd
+│     └── main.go                  // entry point (optional for now)
+│
+├── /internal
+│     ├── /db
+│     │     ├── connection.go      // open DB connection
+│     │     ├── queries.go         // SQL queries returning raw structs
+│     │     └── repository.go      // fetch functions (GetDestinations, etc.)
+│     │
+│     ├── /models
+│     │     └── models.go          // raw DB structs (mirror tables)
+│     │
+│     ├── /loader
+│     │     └── loader.go          // converts raw DB structs → algorithm structs
+│     │
+│     ├── /algorithm
+│     │     ├── structs.go         // logic-ready structs
+│     │     ├── scoring.go         // scoring logic
+│     │     ├── allocation.go      // day allocation logic
+│     │     └── routing.go         // route ordering logic
+│     │
+│     └── /utils
+│           └── helpers.go         // small helpers (contains, maps, etc.)
+│
+└── go.mod

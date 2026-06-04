@@ -59,3 +59,25 @@ func BuildMenu(drinks []Drink, addons []DrinkAddon) []MenuItem {
 
     return menu
 }
+
+
+func BuildDestinations(
+    dbDestinations []models.Destinations,
+    dbTags []models.Tag,
+    dbDestinationTags []models.DestinationTag,
+    dbActivities []models.Activity,
+    dbActivityTags []models.ActivityTag,) []loader.Destination {
+
+	activityMap := make(map[int][]algorithm.Activity)
+
+	for _, a := range dbActivities {
+		activityMap[a.DestinationID] = append(activityMap[a.DestinationID], loader.Activity{
+			ID:           a.ActivityID,
+			Name:         a.Name,
+			Description:  a.Description,
+			PriceAverage: a.PriceAverage,
+			Tags:         activityTagMap[a.ActivityID], // ← you must fill this earlier
+		})
+	}
+}
+
