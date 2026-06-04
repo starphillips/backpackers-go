@@ -1,33 +1,3 @@
-1. Should I allow activities to have multiple tags?
-
-Example: surfing could be watersports or adrenaline junkie ?
-
-Tags Explained:
-Tags = the category
-Destintions can have multiple tags
-Countries have no tags
-Acitvities have only one tag
-
-New change: activities can have multiple tags. 
- 
-ACTIVITIES = MULTIPLE TAGS
-
-create table public.activities(
-    id serial primary key,
-    activity_name text not null,
-    destination_id int references public.destinations(id),
-    description text,
-    price_average numeric(8,2)
-);
-
-
-create table public.activity_tags(
-    activity_id int references public.activities(id),
-    tag_id int references public.tags(id),
-    primary key(activity_id, tag_id)
-);
-
-
 2. Should I add additional tags?
 
 Additional tags
