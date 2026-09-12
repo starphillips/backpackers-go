@@ -27,11 +27,15 @@ type DestinationTag struct {
 	TagID         int
 }
 
+type ActivityTag struct {
+	ActivityID int
+	TagID      int
+}
+
 type Activity struct {
 	Name          string
 	ActivityID    int
 	DestinationID int
-	TagID         int
 	Description   string
 	PriceAverage  float64
 }
