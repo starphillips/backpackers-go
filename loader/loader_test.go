@@ -25,7 +25,6 @@ func TestBuildTagNameMap(t *testing.T) {
 
 func TestBuildTagsByDestination(t *testing.T) {
 	// define the tags first
-
 	tagNameByID := map[int]string{
 		1: "Hiking",
 		2: "Watersports",
@@ -48,4 +47,28 @@ func TestBuildTagsByDestination(t *testing.T) {
 		t.Errorf("Destinations 2 tags wrong, got %v", result[2])
 	}
 
+}
+
+func TestBuildTagsByActivity(t *testing.T) {
+	tagNameByID := map[int]string{
+		1: "Hiking",
+		2: "Watersports",
+		3: "Adrenaline",
+	}
+
+	dbActivityTags := []models.ActivityTag{
+		{ActivityID: 1, TagID: 1},
+		{ActivityID: 1, TagID: 2},
+		{ActivityID: 2, TagID: 3},
+	}
+
+	results := BuildTagsByActivity(dbActivityTags, tagNameByID)
+
+	if !slices.Equal(results[1], []string{"Hiking", "Watersports"}) {
+		t.Errorf("Activity 1 tags are wrong, got %v", results[1])
+	}
+
+	if !slices.Equal(results[2], []string{"Adrenaline"}) {
+		t.Errorf("Activity 2 tags are incorrect, got %v", results[2])
+	}
 }
