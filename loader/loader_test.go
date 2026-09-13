@@ -2,9 +2,11 @@ package loader
 
 import (
 	"fmt"
+	"reflect"
 	"slices"
 	"testing"
 
+	"github.com/starphillips/backpackers-go/algorithm"
 	"github.com/starphillips/backpackers-go/models"
 )
 
@@ -71,4 +73,166 @@ func TestBuildTagsByActivity(t *testing.T) {
 	if !slices.Equal(results[2], []string{"Adrenaline"}) {
 		t.Errorf("Activity 2 tags are incorrect, got %v", results[2])
 	}
+}
+
+func TestBuildActivitiesByDestination(t *testing.T) {
+	tagsByActivityID := map[int][]string{
+		1: {"Culture Rich"},
+		2: {"Culture Rich", "Chill/Relaxed"},
+		3: {"Hiking"},
+	}
+
+	dbActivities := []models.Activity{
+		{
+			Name:          "Recoleta Walking Tour",
+			ActivityID:    1,
+			DestinationID: 1,
+			Description:   "Guided cultural walk through Recoleta and historic landmarks.",
+			PriceAverage:  15.00,
+		},
+		{
+			Name:          "Palermo Café Hopping",
+			ActivityID:    2,
+			DestinationID: 1,
+			Description:   "Relaxed café and food experience in Palermo district.",
+			PriceAverage:  20.00,
+		},
+		{
+			Name:          "Laguna de los Tres Trek",
+			ActivityID:    3,
+			DestinationID: 2,
+			Description:   "Full-day Patagonia hike with views of Mount Fitz Roy.",
+			PriceAverage:  0.00,
+		},
+	}
+
+	results := BuildActivitiesByDestination(dbActivities, tagsByActivityID)
+
+	expectedDest1 := []algorithm.Activity{
+		{
+			ID:           1,
+			Name:         "Recoleta Walking Tour",
+			Tags:         []string{"Culture Rich"},
+			Description:  "Guided cultural walk through Recoleta and historic landmarks.",
+			PriceAverage: 15.00,
+		},
+		{
+			ID:           2,
+			Name:         "Palermo Café Hopping",
+			Tags:         []string{"Culture Rich", "Chill/Relaxed"},
+			Description:  "Relaxed café and food experience in Palermo district.",
+			PriceAverage: 20.00,
+		},
+	}
+
+	expectedDest2 := []algorithm.Activity{
+		{
+			ID:           3,
+			Name:         "Laguna de los Tres Trek",
+			Tags:         []string{"Hiking"},
+			Description:  "Full-day Patagonia hike with views of Mount Fitz Roy.",
+			PriceAverage: 0.00,
+		},
+	}
+
+	if !reflect.DeepEqual(results[1], expectedDest1) {
+		t.Errorf("Destination 1 activities wrong, got %v", results[1])
+	}
+
+	if !reflect.DeepEqual(results[2], expectedDest2) {
+		t.Errorf("Destination 2 activities wrong, got %v", results[2])
+	}
+
+}
+
+func TestBuildDestinations(t *testing.T) {
+	dbDestinations := []models.Destinations{
+		{
+			Name:          "Buenos Aires",
+			DestinationID: 1,
+			CountryID:     1,
+			Latitude:      -34.603700,
+			Longitude:     -58.381600,
+			MinDays:       3,
+			MaxDays:       6,
+			Description:   "Cultural capital with nightlife, food and historic districts.",
+			CostLevel:     "Medium",
+		},
+		{
+			Name:          "El Chaltén",
+			DestinationID: 2,
+			CountryID:     1,
+			Latitude:      -49.331500,
+			Longitude:     -72.886300,
+			MinDays:       3,
+			MaxDays:       5,
+			Description:   "Patagonia hiking town known for mountain trails and glaciers.",
+			CostLevel:     "Medium",
+		},
+	}
+
+	tagsByDestinationID := map[int][]string{
+		1: {"Hiking", "Sailing"},
+	}
+
+	activitiesByDestinationID := map[int][]algorithm.Activity{
+		1: {
+			{
+				ID:           1,
+				Name:         "Recoleta Walking Tour",
+				Tags:         []string{"Culture Rich"},
+				Description:  "Guided cultural walk through Recoleta and historic landmarks.",
+				PriceAverage: 15.00,
+			},
+			{
+				ID:           2,
+				Name:         "Palermo Café Hopping",
+				Tags:         []string{"Culture Rich", "Chill/Relaxed"},
+				Description:  "Relaxed café and food experience in Palermo district.",
+				PriceAverage: 20.00,
+			},
+		},
+	}
+
+	expDestination1 := []algorithm.Destination{
+		{
+			ID:          1,
+			CountryID:   1,
+			Name:        "Buenos Aires",
+			Latitude:    -34.603700,
+			Longitude:   -58.381600,
+			MinDays:     3,
+			MaxDays:     6,
+			Description: "Cultural capital with nightlife, food and historic districts.",
+			CostLevel:   "Medium",
+			Tags:        tagsByDestinationID[1],
+			Activities:  activitiesByDestinationID[1],
+		},
+	}
+
+	expDestination2 := []algorithm.Destination{
+		{
+			ID:          2,
+			CountryID:   1,
+			Name:        "El Chaltén",
+			Latitude:    -49.331500,
+			Longitude:   -72.886300,
+			MinDays:     3,
+			MaxDays:     5,
+			Description: "Patagonia hiking town known for mountain trails and glaciers.",
+			CostLevel:   "Medium",
+			Tags:        nil,
+			Activities:  nil,
+		},
+	}
+
+	results := BuildDestinations(dbDestinations, tagsByDestinationID, activitiesByDestinationID)
+	if !reflect.DeepEqual(results[0], expDestination1[0]) {
+		t.Errorf("Destination 1 built incorrectly, got %v", results[0])
+	}
+
+	if !reflect.DeepEqual(results[1], expDestination2[0]) {
+		t.Errorf("Destination 2 built incorrectly, got %v", results[1])
+	}
+
 }

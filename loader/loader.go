@@ -57,7 +57,30 @@ func BuildActivitiesByDestination(dbActivities []models.Activity, tagsByActivity
 	return activitiesByDestinationID
 }
 
+func BuildDestinations(dbDestinations []models.Destinations, tagsByDestinationID map[int][]string, activitiesByDestinationID map[int][]algorithm.Activity) []algorithm.Destination {
+	destinations := []algorithm.Destination{}
+
+	for _, d := range dbDestinations {
+		destinations = append(destinations, algorithm.Destination{
+			ID:          d.DestinationID,
+			CountryID:   d.CountryID,
+			Name:        d.Name,
+			Latitude:    d.Latitude,
+			Longitude:   d.Longitude,
+			MinDays:     d.MinDays,
+			MaxDays:     d.MaxDays,
+			Description: d.Description,
+			CostLevel:   d.CostLevel,
+			Tags:        tagsByDestinationID[d.DestinationID],
+			Activities:  activitiesByDestinationID[d.DestinationID],
+		})
+	}
+
+	return destinations
+}
+
 // BuildTagNameMap - ability to loop through the different tags IDs and provide the string value
 // BuildTagsByDestination - ability to grab the tags for each destination and append it to the destinations's list (as there can be multiple)
 // BuildTagsByActivity - ability to grab the tags for each activity and append it to the activity's list (as there can be multiple)
 // BuildActivitiesByDestination - abiloity to match each activity to its destination
+// BuildDestinations - ability to match each db destination to the algo-ready destination
