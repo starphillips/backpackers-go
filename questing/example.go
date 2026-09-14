@@ -1,7 +1,5 @@
 package questing
 
-import "github.com/starphillips/backpackers-go/algorithm"
-
 type Drink struct {
 	ID        int
 	Name      string
@@ -62,22 +60,22 @@ func BuildMenu(drinks []Drink, addons []DrinkAddon) []MenuItem {
 	return menu
 }
 
-func BuildDestinations(
-	dbDestinations []models.Destinations,
-	dbTags []models.Tag,
-	dbDestinationTags []models.DestinationTag,
-	dbActivities []models.Activity,
-	dbActivityTags []models.ActivityTag) []models.Destination {
+// func BuildDestinations(
+// 	dbDestinations []models.Destinations,
+// 	dbTags []models.Tag,
+// 	dbDestinationTags []models.DestinationTag,
+// 	dbActivities []models.Activity,
+// 	dbActivityTags []models.ActivityTag) []models.Destination {
 
-	activityMap := make(map[int][]algorithm.Activity)
+// 	activityMap := make(map[int][]algorithm.Activity)
 
-	for _, a := range dbActivities {
-		activityMap[a.DestinationID] = append(activityMap[a.DestinationID], loader.Activity{
-			ID:           a.ActivityID,
-			Name:         a.Name,
-			Description:  a.Description,
-			PriceAverage: a.PriceAverage,
-			Tags:         activityTagMap[a.ActivityID], // ← you must fill this earlier
-		})
-	}
-}
+// 	for _, a := range dbActivities {
+// 		activityMap[a.DestinationID] = append(activityMap[a.DestinationID], loader.Activity{
+// 			ID:           a.ActivityID,
+// 			Name:         a.Name,
+// 			Description:  a.Description,
+// 			PriceAverage: a.PriceAverage,
+// 			Tags:         activityTagMap[a.ActivityID], // ← you must fill this earlier
+// 		})
+// 	}
+// }

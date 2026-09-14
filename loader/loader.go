@@ -5,7 +5,6 @@ import (
 	"github.com/starphillips/backpackers-go/models"
 )
 
-// algorithm.Destination.Tags is []string, but DestinationTag/ActivityTag only gives IDs
 func BuildTagNameMap(dbTags []models.Tag) map[int]string {
 	tagNameByID := make(map[int]string)
 
@@ -38,8 +37,6 @@ func BuildTagsByActivity(dbActivityTags []models.ActivityTag, tagNameByID map[in
 }
 
 func BuildActivitiesByDestination(dbActivities []models.Activity, tagsByActivityID map[int][]string) map[int][]algorithm.Activity {
-	// Take Name, ID, Description and Price Average directly from the models struct (db)
-	// Map the Activity to the destination, append the list of activities at a destination as there can be multiple?
 	activitiesByDestinationID := make(map[int][]algorithm.Activity)
 
 	// i will need to start looping over models.activity
@@ -79,8 +76,27 @@ func BuildDestinations(dbDestinations []models.Destinations, tagsByDestinationID
 	return destinations
 }
 
-// BuildTagNameMap - ability to loop through the different tags IDs and provide the string value
-// BuildTagsByDestination - ability to grab the tags for each destination and append it to the destinations's list (as there can be multiple)
-// BuildTagsByActivity - ability to grab the tags for each activity and append it to the activity's list (as there can be multiple)
-// BuildActivitiesByDestination - abiloity to match each activity to its destination
-// BuildDestinations - ability to match each db destination to the algo-ready destination
+func LoadDestinations(
+	dbTags []models.Tag,
+	dbDestinationTags []models.DestinationTag,
+	dbActivityTags []models.ActivityTag,
+	dbActivities []models.Activity,
+	dbDestinations []models.Destinations) []algorithm.Destination {
+
+	tagNameByID := BuildTagNameMap(dbTags)
+	// this function returns the tagNameByID. so we hold its vaule in the variable it literally is.
+
+	tagsByActivityID := BuildTagsByActivity(dbActivityTags, tagNameByID)
+	tagsByDestinationID := BuildTagsByDestination(dbDestinationTags, tagNameByID)
+	activitiesByDestinationID := BuildActivitiesByDestination(dbActivities, tagsByActivityID)
+
+	return BuildDestinations(dbDestinations, tagsByDestinationID, activitiesByDestinationID)
+
+}
+
+// BuildTagNameMap - map db tags IDs and to their name for comparisons
+// BuildTagsByDestination - grab the destination's tags and append it to the destinations's list (as there can be multiple)
+// BuildTagsByActivity - grab the activity's tags and append it to the activity's list (as there can be multiple)
+// BuildActivitiesByDestination - map each activity to its destination
+// BuildDestinations - map each db destination to the algo-ready destination
+// LoadDestinations -
