@@ -61,6 +61,7 @@ func BuildDestinations(dbDestinations []models.Destinations, tagsByDestinationID
 		destinations = append(destinations, algorithm.Destination{
 			ID:          d.DestinationID,
 			CountryID:   d.CountryID,
+			RegionID:    d.RegionID,
 			Name:        d.Name,
 			Latitude:    d.Latitude,
 			Longitude:   d.Longitude,
@@ -99,4 +100,4 @@ func LoadDestinations(
 // BuildTagsByActivity - grab the activity's tags and append it to the activity's list (as there can be multiple)
 // BuildActivitiesByDestination - map each activity to its destination
 // BuildDestinations - map each db destination to the algo-ready destination
-// LoadDestinations -
+// LoadDestinations - calling all build functions in one place to load a destination

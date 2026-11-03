@@ -151,6 +151,7 @@ func TestBuildDestinations(t *testing.T) {
 			Name:          "Buenos Aires",
 			DestinationID: 1,
 			CountryID:     1,
+			RegionID:      1,
 			Latitude:      -34.603700,
 			Longitude:     -58.381600,
 			MinDays:       3,
@@ -172,7 +173,7 @@ func TestBuildDestinations(t *testing.T) {
 	}
 
 	tagsByDestinationID := map[int][]string{
-		1: {"Culture Rich", "Chilled/Relaxed"},
+		1: {"Culture Rich", "Chill/Relaxed"},
 	}
 
 	activitiesByDestinationID := map[int][]algorithm.Activity{
@@ -242,7 +243,7 @@ func TestLoadDestinations(t *testing.T) {
 		{TagID: 1, Name: "Hiking"},
 		{TagID: 2, Name: "Watersports"},
 		{TagID: 3, Name: "Culture Rich"},
-		{TagID: 4, Name: "Chilled/Relaxed"},
+		{TagID: 4, Name: "Chill/Relaxed"},
 	}
 
 	dbDestinationTags := []models.DestinationTag{
@@ -312,6 +313,7 @@ func TestLoadDestinations(t *testing.T) {
 	expDestination1 := algorithm.Destination{
 		ID:          1,
 		CountryID:   1,
+		RegionID:    1,
 		Name:        "Buenos Aires",
 		Latitude:    -34.603700,
 		Longitude:   -58.381600,
@@ -319,7 +321,7 @@ func TestLoadDestinations(t *testing.T) {
 		MaxDays:     6,
 		Description: "Cultural capital with nightlife, food and historic districts.",
 		CostLevel:   "Medium",
-		Tags:        []string{"Culture Rich", "Chilled/Relaxed"},
+		Tags:        []string{"Culture Rich", "Chill/Relaxed"},
 		Activities: []algorithm.Activity{
 			{ID: 1, Name: "Recoleta Walking Tour", Tags: []string{"Hiking", "Culture Rich"}, Description: "Guided cultural walk through Recoleta and historic landmarks.", PriceAverage: 15.00},
 			{ID: 2, Name: "Palermo Café Hopping", Tags: []string{"Culture Rich", "Chilled/Relaxed"}, Description: "Relaxed café and food experience in Palermo district.", PriceAverage: 20.00},
@@ -329,6 +331,7 @@ func TestLoadDestinations(t *testing.T) {
 	expDestination2 := algorithm.Destination{
 		ID:          2,
 		CountryID:   1,
+		RegionID:    1,
 		Name:        "El Chaltén",
 		Latitude:    -49.331500,
 		Longitude:   -72.886300,

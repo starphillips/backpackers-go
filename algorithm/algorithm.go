@@ -3,28 +3,29 @@ package algorithm
 // Algorithm structs represent processed, enriched, ready-to-score data
 
 type Destination struct {
-	ID int
-	CountryID int
-	Name string
-	Latitude float64
-	Longitude float64
-	MinDays int
-	MaxDays int
+	ID          int
+	CountryID   int
+	RegionID    int
+	Name        string
+	Latitude    float64
+	Longitude   float64
+	MinDays     int
+	MaxDays     int
 	Description string
-	CostLevel string
+	CostLevel   string
 
-	Tags []string
+	Tags       []string
 	Activities []Activity
 
-	Score float64
+	Score        float64
 	AssignedDays int
 }
 
 type Activity struct {
-	ID int
-	Name string
-	Tags []string
-	Description string
+	ID           int
+	Name         string
+	Tags         []string
+	Description  string
 	PriceAverage float64
 }
 
@@ -32,11 +33,11 @@ type Activity struct {
 // They are needed for identifying and matching to the DB
 
 type UserInput struct {
-	TotalDays int
+	TotalDays         int
 	SelectedCountries []int // Goes by the ID
-	SelectedTags []int
-	SelectedBudget string
-	SelectedPace string
+	SelectedTags      []int
+	SelectedBudget    string
+	SelectedPace      string
 }
 
-// 
+//

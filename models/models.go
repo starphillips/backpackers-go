@@ -3,11 +3,19 @@ package models
 type Countries struct {
 	Name      string
 	CountryID int
+	IsActive  bool
+}
+
+type Region struct {
+	Name      string
+	CountryID int
+	RegionID  int
 }
 
 type Destinations struct {
 	Name          string
 	DestinationID int // only reference other structs when creating instances of it i.e. Countries.CountryID
+	RegionID      int
 	CountryID     int
 	Latitude      float64
 	Longitude     float64
